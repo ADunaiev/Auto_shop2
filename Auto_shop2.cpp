@@ -1,6 +1,8 @@
 #include <algorithm>
 #include <iostream>
 #include <list>
+#include <vector>
+#include <map>
 #include <string.h>
 #include <fstream>
 using namespace std;
@@ -19,12 +21,13 @@ using namespace std;
 //классы - функторов.Проверьте работу полученного решения на разных 
 //контейнерах с разным содержимым.
 
+template <typename T1, typename T2>
 class Auto_total
 {
-    int count = 0;
-    double sum = 0;
+    T1 count = 0;
+    T2 sum = 0;
 public:
-    void operator()(double sumP)
+    void operator()(T2 sumP)
     {
         sum += sumP;
 
@@ -42,7 +45,7 @@ public:
         cout << "Total price of all cars is  USD " << sum << ".\n";
     }
 };
-Auto_total a_total;
+Auto_total<int, double> a_total;
 
 class Auto
 {
@@ -341,199 +344,221 @@ int Find_Menu()
 
 int main()
 {
-    list<Auto> autos = LoadFromFile();
+    {
+        //list<Auto> autos = LoadFromFile();
 
-    try {
-        int t;
+        //try {
+        //    int t;
 
-        do {
-            switch (Menu()) {
-            case 1:
-                show_all(autos);
-                break;
-            case 2:
-            {
-                cout << "\nAdditg new car. Please enter";
-                autos.push_back(Add_Auto());
-                cout << "new car added!\n";
-                break;
-            }
-            case 3:
-            {
-                int temp;
-                cout << "Please enter car number you want to delete: ";
-                cin >> temp;
-                Delete_Auto(autos, temp);
-                cout << "Car " << temp << " deleted.\n";
-                break;
-            }
-            case 4:
-            {
-                int temp;
-                cout << "\nPlease enter number of car to edit: ";
-                cin >> temp;
+        //    do {
+        //        switch (Menu()) {
+        //        case 1:
+        //            show_all(autos);
+        //            break;
+        //        case 2:
+        //        {
+        //            cout << "\nAdditg new car. Please enter";
+        //            autos.push_back(Add_Auto());
+        //            cout << "new car added!\n";
+        //            break;
+        //        }
+        //        case 3:
+        //        {
+        //            int temp;
+        //            cout << "Please enter car number you want to delete: ";
+        //            cin >> temp;
+        //            Delete_Auto(autos, temp);
+        //            cout << "Car " << temp << " deleted.\n";
+        //            break;
+        //        }
+        //        case 4:
+        //        {
+        //            int temp;
+        //            cout << "\nPlease enter number of car to edit: ";
+        //            cin >> temp;
 
-                Edit_Auto(autos, temp);
-                cout << "car edited!\n";
-                break;
-            }
-            case 5:
-            {
-                int t2 = 1;
+        //            Edit_Auto(autos, temp);
+        //            cout << "car edited!\n";
+        //            break;
+        //        }
+        //        case 5:
+        //        {
+        //            int t2 = 1;
 
-                do {
-                    switch (Sort_Menu())
-                    {
-                    case 1:
-                    {
-                        autos.sort(SortByName);
-                        show_all(autos);
-                        break;
-                    }
-                    case 2:
-                    {
-                        autos.sort(SortByProdYear);
-                        show_all(autos);
-                        break;
-                    }
-                    case 3:
-                    {
-                        autos.sort(SortByEngineVolume);
-                        show_all(autos);
-                        break;
-                    }
-                    case 4:
-                    {
-                        autos.sort(SortByPrice);
-                        show_all(autos);
-                        break;
-                    }
-                    case 0:
-                        t2 = 0;
-                        break;
-                    default:
-                        cout << "Wrong choice!\n";
-                    }
+        //            do {
+        //                switch (Sort_Menu())
+        //                {
+        //                case 1:
+        //                {
+        //                    autos.sort(SortByName);
+        //                    show_all(autos);
+        //                    break;
+        //                }
+        //                case 2:
+        //                {
+        //                    autos.sort(SortByProdYear);
+        //                    show_all(autos);
+        //                    break;
+        //                }
+        //                case 3:
+        //                {
+        //                    autos.sort(SortByEngineVolume);
+        //                    show_all(autos);
+        //                    break;
+        //                }
+        //                case 4:
+        //                {
+        //                    autos.sort(SortByPrice);
+        //                    show_all(autos);
+        //                    break;
+        //                }
+        //                case 0:
+        //                    t2 = 0;
+        //                    break;
+        //                default:
+        //                    cout << "Wrong choice!\n";
+        //                }
 
-                } while (t2);
+        //            } while (t2);
 
-                break;
-            }
-            case 6:
-            {
-                int t3 = 1;
+        //            break;
+        //        }
+        //        case 6:
+        //        {
+        //            int t3 = 1;
 
-                do {
-                    switch (Find_Menu())
-                    {
-                    case 1:
-                    {
-                        string temp_s;
-                        cout << "Enter car name: ";
-                        cin >> temp_s;
+        //            do {
+        //                switch (Find_Menu())
+        //                {
+        //                case 1:
+        //                {
+        //                    string temp_s;
+        //                    cout << "Enter car name: ";
+        //                    cin >> temp_s;
 
-                        auto it = find_if(autos.begin(), autos.end(),
-                            [&](Auto& a) { return a.get_name() == temp_s; });
+        //                    auto it = find_if(autos.begin(), autos.end(),
+        //                        [&](Auto& a) { return a.get_name() == temp_s; });
 
-                        if (it != autos.cend())
-                        {
-                            cout << "There is car with this name\n" << endl;
-                            cout << *it;
-                        }
-                        else
-                            cout << "There is no car with this name\n" << endl;
+        //                    if (it != autos.cend())
+        //                    {
+        //                        cout << "There is car with this name\n" << endl;
+        //                        cout << *it;
+        //                    }
+        //                    else
+        //                        cout << "There is no car with this name\n" << endl;
 
-                        break;
-                    }
-                    case 2:
-                    {
-                        int temp_year;
-                        cout << "Enter car production year: ";
-                        cin >> temp_year;
+        //                    break;
+        //                }
+        //                case 2:
+        //                {
+        //                    int temp_year;
+        //                    cout << "Enter car production year: ";
+        //                    cin >> temp_year;
 
-                        auto it = find_if(autos.begin(), autos.end(),
-                            [&](Auto& a) { return a.get_prod_year() == temp_year; });
+        //                    auto it = find_if(autos.begin(), autos.end(),
+        //                        [&](Auto& a) { return a.get_prod_year() == temp_year; });
 
-                        if (it != autos.end())
-                        {
-                            cout << "There is car with this production year\n" << endl;
-                            cout << *it;
-                        }
-                        else
-                            cout << "There is no car with this production year\n" << endl;
+        //                    if (it != autos.end())
+        //                    {
+        //                        cout << "There is car with this production year\n" << endl;
+        //                        cout << *it;
+        //                    }
+        //                    else
+        //                        cout << "There is no car with this production year\n" << endl;
 
-                        break;
-                    }
-                    case 3:
-                    {
-                        int temp_eng_vol;
-                        cout << "Enter car engine volume: ";
-                        cin >> temp_eng_vol;
+        //                    break;
+        //                }
+        //                case 3:
+        //                {
+        //                    int temp_eng_vol;
+        //                    cout << "Enter car engine volume: ";
+        //                    cin >> temp_eng_vol;
 
-                        auto it = find_if(autos.begin(), autos.end(),
-                            [&](Auto& a)
-                            { return a.get_engine_volume() == temp_eng_vol; });
+        //                    auto it = find_if(autos.begin(), autos.end(),
+        //                        [&](Auto& a)
+        //                        { return a.get_engine_volume() == temp_eng_vol; });
 
-                        if (it != autos.end())
-                        {
-                            cout << "There is car with this engine volume\n" << endl;
-                            cout << *it;
-                        }
-                        else
-                            cout << "There is no car with this engine volume\n" << endl;
+        //                    if (it != autos.end())
+        //                    {
+        //                        cout << "There is car with this engine volume\n" << endl;
+        //                        cout << *it;
+        //                    }
+        //                    else
+        //                        cout << "There is no car with this engine volume\n" << endl;
 
-                        break;
-                    }
-                    case 4:
-                    {
-                        double temp_price;
-                        cout << "Enter car price: ";
-                        cin >> temp_price;
+        //                    break;
+        //                }
+        //                case 4:
+        //                {
+        //                    double temp_price;
+        //                    cout << "Enter car price: ";
+        //                    cin >> temp_price;
 
-                        auto it = find_if(autos.begin(), autos.end(),
-                            [&](Auto& a) { return a.get_price() == temp_price; });
+        //                    auto it = find_if(autos.begin(), autos.end(),
+        //                        [&](Auto& a) { return a.get_price() == temp_price; });
 
-                        if (it != autos.end())
-                        {
-                            cout << "There is car with this price\n" << endl;
-                            cout << *it;
-                        }
-                        else
-                            cout << "There is no car with this price\n" << endl;
+        //                    if (it != autos.end())
+        //                    {
+        //                        cout << "There is car with this price\n" << endl;
+        //                        cout << *it;
+        //                    }
+        //                    else
+        //                        cout << "There is no car with this price\n" << endl;
 
 
-                        break;
-                    }
-                    case 0:
-                        t3 = 0;
-                        break;
-                    default:
-                        cout << "Wrong choice!\n";
-                    }
+        //                    break;
+        //                }
+        //                case 0:
+        //                    t3 = 0;
+        //                    break;
+        //                default:
+        //                    cout << "Wrong choice!\n";
+        //                }
 
-                } while (t3);
+        //            } while (t3);
 
-                break;
-            }
-            case 7:
-            {
-                a_total.show_count();
-                a_total.show_sum();
-                break;
-            }
-            case 0:
-            {cout << "Good Buy!\n";
-            SaveToFile(autos);
-            return 0;
-            }
-            default:
-                cout << "Wrong choice!\n";
-            }
-        } while (1);
+        //            break;
+        //        }
+        //        case 7:
+        //        {
+        //            a_total.show_count();
+        //            a_total.show_sum();
+        //            break;
+        //        }
+        //        case 0:
+        //        {cout << "Good Buy!\n";
+        //        SaveToFile(autos);
+        //        return 0;
+        //        }
+        //        default:
+        //            cout << "Wrong choice!\n";
+        //        }
+        //    } while (1);
+        //}
+        //catch (char* su) {
+        //    std::cout << "\n\nException!!!\n\n";
+        //}
     }
-    catch (char* su) {
-        std::cout << "\n\nException!!!\n\n";
-    }
+
+    cout << "Checking for vector\n";
+    vector<float> l1{ 1, 2, 3.2, 123, 1, 2, 3 };
+    Auto_total<int, float> a1;
+
+    for (auto var : l1)
+        a1(var);
+
+    a1.show_count();
+    a1.show_sum();
+
+    cout << "\nChecking for map\n";
+    map<string, int> m1{ {"Masha", 12}, {"Petia", 32}, {"Jack", 21} };
+    Auto_total<int, int> a2;
+
+    for (auto var : m1)
+        a2(var.second);
+
+    a2.show_count();
+    a2.show_sum();
 
     return 0;
 }
